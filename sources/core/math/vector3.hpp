@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include "core/types.hpp"
 
 template<typename T>
@@ -89,7 +90,7 @@ constexpr Vector3<T> &Vector3<T>::operator=(Vector3<T> &&other){
 
 template <typename T>
 constexpr T &Vector3<T>::operator[](size_t index){
-    SX_CORE_ASSERT(index < 3, "Vector3 can not index more than 3 elements");
+    assert(index < 3 && "Vector3 can not index more than 3 elements");
     return Data[index];
 }
 
