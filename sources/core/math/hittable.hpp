@@ -9,5 +9,5 @@ struct HitResult {
 };
 
 struct Hittable{
-	virtual std::optional<HitResult> Hit(const Ray3f &ray) = 0;
+	virtual std::optional<HitResult> Hit(const Ray3f &ray)const = 0;
 };
