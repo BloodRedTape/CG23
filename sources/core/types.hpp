@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 
 typedef std::int8_t s8;
 typedef std::uint8_t u8;
