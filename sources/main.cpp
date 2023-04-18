@@ -11,6 +11,7 @@ int main() {
 
 	Scene scene;
 	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 1.f));
+	scene.PointLight = Light{{ -2.f, 1.f, 1.5}};
 
 	Camera camera{
 		-Vector3f::Forward() * 3.f,

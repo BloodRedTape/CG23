@@ -16,7 +16,7 @@ void ConsoleRenderer::Render(const Scene& scene, const Camera& camera) {
 
 			std::optional<HitResult> result = TraceRay(ray, scene);
 
-			char color = result.has_value() ? ClosestHit(*result) : Miss();
+			char color = result.has_value() ? ClosestHit(*result, scene) : Miss();
 
 			putchar(color);
 		}
@@ -66,10 +66,9 @@ char ConsoleRenderer::Miss() {
 	return ' ';
 }
 
-char ConsoleRenderer::ClosestHit(HitResult hit) {
-	Vector3f light(-2, 1, 1.5);
+char ConsoleRenderer::ClosestHit(HitResult hit, const Scene &scene) {
 
-	Vector3f light_to_object_direction = light - hit.Position;
+	Vector3f light_to_object_direction = scene.PointLight.Position - hit.Position;
 
 	float diffuse = std::max(Math::Dot(hit.Normal, light_to_object_direction), 0.f);
 

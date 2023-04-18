@@ -21,5 +21,5 @@ private:
 
 	char Miss();
 
-	char ClosestHit(HitResult hit);
+	char ClosestHit(HitResult hit, const Scene &scene);
 };
