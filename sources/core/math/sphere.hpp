@@ -40,9 +40,9 @@ public:
 		float distance2 = (point2 - ray.Origin()).Length();
 	
 		if (distance1 < distance2){
-			return {{ point1 }};
+			return {{ point1, point1 - m_Origin}};
 		} else {
-			return {{ point2 }};
+			return {{ point2, point2 - m_Origin}};
 		}
 	}
 };

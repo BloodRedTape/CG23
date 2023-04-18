@@ -27,7 +27,7 @@ public:
         if (t < 0.f) 
             return {};
 
-        return {{ ray.At(t)}};
+        return {{ ray.At(t), m_Normal }};
 	}
 
 };

@@ -6,6 +6,7 @@
 
 struct HitResult {
 	Vector3f Position;
+	Vector3f Normal;
 };
 
 struct Hittable{
