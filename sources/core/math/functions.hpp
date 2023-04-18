@@ -25,6 +25,11 @@ constexpr NumberType Abs(NumberType radians){
 }
 
 template<typename NumberType>
+bool IsNearlyEqual(NumberType a, NumberType b, NumberType epsilon = Epsilon<NumberType>()) {
+    return Abs(a - b) <= epsilon;
+}
+
+template<typename NumberType>
 constexpr NumberType Sin(NumberType radians){
     return sin(radians);
 }
