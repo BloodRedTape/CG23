@@ -6,7 +6,7 @@ add_subdirectory(libs/googletest)
 add_executable(CG23
 	"sources/main.cpp"
 	"tests/core/math/vector3.cpp"
-)
+ "tests/core/math/sphere.cpp")
 
 target_include_directories(CG23 PUBLIC "sources")
 
