@@ -40,6 +40,10 @@ struct Vector3{
     constexpr LengthType Length()const {
         return Math::Sqrt(x*x + y*y + z*z);
     }
+
+    static const Vector3<T> &Forward();// = Vector3<T>(1, 0, 0);
+    static const Vector3<T> &Up();// = Vector3<T>(0, 1, 0);
+    static const Vector3<T> &Right();// = Vector3<T>(0, 0, 1);
 };
 
 
@@ -226,6 +230,21 @@ constexpr Vector3<T> &operator/=(Vector3<T> &left, const Vector3<T> &right){
     left.y/=right.y;
     left.z/=right.z;
     return left;
+}
+template <typename T>
+const Vector3<T> &Vector3<T>::Forward(){
+    static auto forward = Vector3<T>(1, 0, 0);
+    return forward;
+}
+template <typename T>
+const Vector3<T> &Vector3<T>::Up(){
+    static auto up = Vector3<T>(0, 1, 0);
+    return up;
+}
+template <typename T>
+const Vector3<T> &Vector3<T>::Right(){
+    static auto right = Vector3<T>(0, 0, 1);
+    return right;
 }
 
 typedef Vector3<s32> Vector3s;
