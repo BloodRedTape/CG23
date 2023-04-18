@@ -1,6 +1,7 @@
 #include "console_renderer.hpp"
 #include "core/math/functions.hpp" 
 #include "core/math/vector2.hpp"
+#include <algorithm>
 
 ConsoleRenderer::ConsoleRenderer(Vector2s viewport):
 	m_Viewport(viewport)
@@ -66,5 +67,16 @@ char ConsoleRenderer::Miss() {
 }
 
 char ConsoleRenderer::ClosestHit(HitResult hit) {
-	return '@';
+	Vector3f light(-2, 1, 1.5);
+
+	Vector3f light_to_object_direction = light - hit.Position;
+
+	float diffuse = std::max(Math::Dot(hit.Normal, light_to_object_direction), 0.f);
+
+	const char colors[] = ".*#0@";
+	int colors_count = lengthof(colors) - 1;
+
+	int index = Math::Clamp<int>(diffuse * 4, 0, colors_count - 1);
+
+	return colors[index];
 }
