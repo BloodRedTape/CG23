@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/math/vector3.hpp"
+#include "math/vector3.hpp"
 
 template <typename VectorType, typename ArgType>
 class Ray {

@@ -2,7 +2,7 @@
 
 #include <assert.h>
 #include "core/types.hpp"
-#include "core/math/functions.hpp"
+#include "math/functions.hpp"
 
 template<typename T>
 struct Vector2{

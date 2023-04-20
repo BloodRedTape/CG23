@@ -2,8 +2,8 @@
 
 #include "gtest\gtest.h"
 
-#include "core/render/console_renderer.hpp"
-#include "core/math/sphere.hpp"
+#include "render/console_renderer.hpp"
+#include "math/sphere.hpp"
 
 int main() {
 	RUN_ALL_TESTS();
