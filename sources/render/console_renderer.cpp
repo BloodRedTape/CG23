@@ -7,7 +7,7 @@ ConsoleRenderer::ConsoleRenderer(Vector2s viewport):
 	m_Viewport(viewport)
 {}
 
-void ConsoleRenderer::Render(const Scene& scene, const Camera& camera) {
+void ConsoleRenderer::Render(const Scene& scene, const Camera& camera, RenderMode mode) {
 	puts("Final Image: ");
 
 	for (int y = m_Viewport.y; y >= 0; y--) {
@@ -16,9 +16,17 @@ void ConsoleRenderer::Render(const Scene& scene, const Camera& camera) {
 
 			std::optional<HitResult> result = TraceRay(ray, scene);
 
-			char color = result.has_value() ? ClosestHit(*result, scene) : Miss();
-
-			putchar(color);
+			switch (mode) {
+			case RenderMode::Color:
+				putchar(result.has_value() ? ClosestHit(*result, scene) : Miss());
+				break;
+			case RenderMode::Intersection:
+				putchar(result.has_value() ? '#' : ' ');
+				break;
+			case RenderMode::Distance:
+				result.has_value() ? printf("%2.1f ", result->Distance) : printf("null ");
+				break;
+			}
 		}
 
 		putchar('\n');

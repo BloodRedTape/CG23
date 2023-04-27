@@ -5,13 +5,20 @@
 #include "math/ray.hpp"
 #include "math/vector2.hpp"
 
+enum class RenderMode {
+	Color,
+	Intersection,
+	Distance
+};
+
+
 class ConsoleRenderer {
 private:
 	Vector2s m_Viewport;
 public:
 	ConsoleRenderer(Vector2s viewport);
 
-	void Render(const Scene &scene, const Camera &camera);
+	void Render(const Scene &scene, const Camera &camera, RenderMode mode);
 
 private:
 

@@ -19,5 +19,5 @@ int main() {
 	};
 	ConsoleRenderer renderer({30, 30});
 
-	renderer.Render(scene, camera);
+	renderer.Render(scene, camera, RenderMode::Color);
 }
