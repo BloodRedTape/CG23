@@ -9,6 +9,6 @@ TEST(Math, Sphere) {
 
 	Sphere sphere({0, 0, 0}, 3.f);
 
-	ASSERT_EQ(sphere.Hit(ray1).has_value(), true);
-	ASSERT_EQ(sphere.Hit(ray2).has_value(), false);
+	ASSERT_EQ(sphere.Hit(ray1, 0, FLT_MAX).has_value(), true);
+	ASSERT_EQ(sphere.Hit(ray2, 0, FLT_MAX).has_value(), false);
 }

@@ -7,7 +7,7 @@ add_executable(CG23
 	"sources/main.cpp"
 	"tests/math/vector3.cpp"
  "tests/math/sphere.cpp" 
- "sources/render/console_renderer.cpp")
+ "sources/render/console_renderer.cpp" )
 
 target_include_directories(CG23 PUBLIC "sources")
 

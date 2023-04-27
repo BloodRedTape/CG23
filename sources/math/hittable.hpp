@@ -7,8 +7,9 @@
 struct HitResult {
 	Vector3f Position;
 	Vector3f Normal;
+	float Distance;
 };
 
 struct Hittable{
-	virtual std::optional<HitResult> Hit(const Ray3f &ray)const = 0;
+	virtual std::optional<HitResult> Hit(const Ray3f &ray, float t_min, float t_max)const = 0;
 };

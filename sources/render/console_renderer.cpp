@@ -62,14 +62,24 @@ Ray3f ConsoleRenderer::GenRay(Vector2s pixel_coordinate, const Camera& camera) {
 }
 
 std::optional<HitResult> ConsoleRenderer::TraceRay(Ray3f ray, const Scene &scene) {
-	for (const HittableRef& hittable : scene.Objects) {
-		std::optional<HitResult> hit = hittable->Hit(ray);
+	std::optional<HitResult> closest_hit;
 
-		if(hit.has_value())
-			return hit;
+	for (const HittableRef& hittable : scene.Objects) {
+		std::optional<HitResult> hit = hittable->Hit(ray, 0.f, FLT_MAX);
+
+
+		if(hit.has_value()){
+
+			if(closest_hit.has_value()){
+				if(hit->Distance < closest_hit->Distance)
+					closest_hit = hit;
+			}else{
+				closest_hit = hit;
+			}
+		}
 	}
 
-	return std::nullopt;
+	return closest_hit;
 }
 
 char ConsoleRenderer::Miss() {
@@ -77,7 +87,6 @@ char ConsoleRenderer::Miss() {
 }
 
 char ConsoleRenderer::ClosestHit(HitResult hit, const Scene &scene) {
-
 	Vector3f light_to_object_direction = scene.PointLight.Position - hit.Position;
 
 	float diffuse = std::max(Math::Dot(hit.Normal, light_to_object_direction), 0.f);

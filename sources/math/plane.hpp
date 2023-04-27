@@ -15,7 +15,7 @@ public:
 		m_Normal(normal)
 	{}
 
-	std::optional<HitResult> Hit(const Ray3f& ray)const override {
+	std::optional<HitResult> Hit(const Ray3f& ray, float t_min, float t_max)const override {
         using namespace Math;
 
         float dot = Dot(m_Normal, ray.Direction());
@@ -27,7 +27,7 @@ public:
         if (t < 0.f) 
             return {};
 
-        return {{ ray.At(t), m_Normal }};
+        return {{ ray.At(t), m_Normal, t}};
 	}
 
 };

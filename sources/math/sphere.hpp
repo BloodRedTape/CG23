@@ -14,8 +14,7 @@ public:
 		m_Radius(radius)
 	{}
 
-	std::optional<HitResult> Hit(const Ray3f& ray)const override {
-
+	std::optional<HitResult> Hit(const Ray3f& ray, float t_min, float t_max)const override {
 		using namespace Math;
 
 		Vector3f k = ray.Origin() - m_Origin;
@@ -29,20 +28,14 @@ public:
 		if (discriminant < 0){
 			return {};
 		}
-	
-		float x1 = (-b + Sqrt(discriminant)) / (2.f * a);
-		float x2 = (-b - Sqrt(discriminant)) / (2.f * a);
 
-		Vector3f point1 = ray.At(x1);
-		Vector3f point2 = ray.At(x2);
-	
-		float distance1 = (point1 - ray.Origin()).Length();
-		float distance2 = (point2 - ray.Origin()).Length();
-	
-		if (distance1 < distance2){
-			return {{ point1, point1 - m_Origin}};
-		} else {
-			return {{ point2, point2 - m_Origin}};
+		float root = (-b - Sqrt(discriminant)) / 2.f * a;
+		if (root < t_min || t_max < root) {
+			root = (-b + Sqrt(discriminant)) / 2.f * a;
+			if (root < t_min || t_max < root)
+				return {};
 		}
+
+		return {{ray.At(root), ray.At(root) - m_Origin, root}};
 	}
 };
