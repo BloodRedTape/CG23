@@ -37,8 +37,10 @@ Ray3f ConsoleRenderer::GenRay(Vector2s pixel_coordinate, const Camera& camera) {
 	const float aspect = m_Viewport.x / m_Viewport.y;
 
 	float h_fov = camera.FOV / 2.f;
-	float projection_plane_distance = Math::Cos(h_fov);
-	float projection_plane_width = Math::Sin(h_fov) * 2;
+	float projection_plane_distance = -Math::Cos(h_fov);
+	float projection_plane_width = -Math::Sin(h_fov) * 2;
+	assert(projection_plane_distance > 0 && projection_plane_width > 0);
+
 	Vector2f projection_plane_size = {projection_plane_width, projection_plane_width / aspect};
 
 	Vector2f projection_plane_pixel_size = projection_plane_size / Vector2f(m_Viewport);
