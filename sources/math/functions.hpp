@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <cassert>
 #include <float.h>
 #include "vector3.hpp"
 
@@ -10,7 +11,7 @@ constexpr double Pi = 3.14159265368979323;
 
 template<typename NumberType>
 constexpr NumberType Epsilon() {
-    static_assert(false, "Epsilon is not implemented for this type");
+    assert(false && "Epsilon is not implemented for this type");
     return NumberType();
 }
 
@@ -27,6 +28,10 @@ constexpr NumberType Abs(NumberType radians){
 template<typename NumberType>
 bool IsNearlyEqual(NumberType a, NumberType b, NumberType epsilon = Epsilon<NumberType>()) {
     return Abs(a - b) <= epsilon;
+}
+template<typename NumberType>
+bool IsInRange(NumberType value, NumberType min, NumberType max) {
+    return value <= max && value >= min;
 }
 
 template<typename NumberType>
