@@ -8,6 +8,7 @@ add_executable(CG23
 	"tests/math/vector3.cpp"
  "tests/math/sphere.cpp" 
  "sources/render/console_renderer.cpp"  
+ "sources/graphics/image.cpp" 
  "sources/graphics/color.cpp")
 
 target_include_directories(CG23 PUBLIC "sources")
