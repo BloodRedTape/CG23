@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <type_traits>
 
 typedef std::int8_t s8;
 typedef std::uint8_t u8;
@@ -20,3 +21,6 @@ template <typename T, size_t N>
 constexpr size_t lengthof(T (&)[N]){
     return N;
 }
+
+
+#define GEN_NON_CONST_GETTER(ConstGetterCallExpr) { return const_cast<std::remove_const_t<decltype(this->ConstGetterCallExpr)>>(const_cast<const std::remove_pointer_t<decltype(this)> *>(this)->ConstGetterCallExpr); }
