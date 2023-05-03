@@ -1,19 +1,29 @@
+cmake_minimum_required(VERSION 3.10)
 project(CG23)
 
+add_library(CG23Core STATIC
+	"core/graphics/image.cpp" 
+	"core/graphics/color.cpp"
+)
+target_include_directories(CG23Core PUBLIC "core")
+target_compile_features(CG23Core PUBLIC cxx_std_17)
+
+
+add_executable(CG23RayTracer
+	"raytracer/main.cpp"
+	"raytracer/render/console_renderer.cpp"
+)
+target_include_directories(CG23RayTracer PUBLIC "raytracer")
+target_link_libraries(CG23RayTracer PRIVATE CG23Core)
+
+
+add_executable(CG23Tests
+	"tests/main.cpp"
+	"tests/math/sphere.cpp"
+	"tests/math/vector3.cpp"
+)
 set(gtest_force_shared_crt ON)
 add_subdirectory(libs/googletest)
+target_link_libraries(CG23Tests PRIVATE gtest PRIVATE CG23Core)
 
-add_executable(CG23
-	"sources/main.cpp"
-	"tests/math/vector3.cpp"
- "tests/math/sphere.cpp" 
- "sources/render/console_renderer.cpp"  
- "sources/graphics/image.cpp" 
- "sources/graphics/color.cpp")
-
-target_include_directories(CG23 PUBLIC "sources")
-
-target_link_libraries(CG23 PRIVATE gtest)
-
-target_compile_features(CG23 PRIVATE cxx_std_17)
 

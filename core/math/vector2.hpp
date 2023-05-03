@@ -1,7 +1,7 @@
 #pragma once
 
 #include <assert.h>
-#include "core/types.hpp"
+#include "utils/types.hpp"
 #include "math/functions.hpp"
 
 template<typename T>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cassert>
-#include "core/types.hpp"
+#include "utils/types.hpp"
 
 template<typename T>
 struct Vector3{
