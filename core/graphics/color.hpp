@@ -1,12 +1,15 @@
 #pragma once
 
 #include "utils/types.hpp"
+#include <limits>
 
 struct Color {
-	u8 R = 255;
-	u8 G = 255;
-	u8 B = 255;
-	u8 A = 255;
+	static constexpr u8 MaxChannelValue = std::numeric_limits<u8>::max();
+
+	u8 R = MaxChannelValue;
+	u8 G = MaxChannelValue;
+	u8 B = MaxChannelValue;
+	u8 A = MaxChannelValue;
 
 	Color() = default;
 
