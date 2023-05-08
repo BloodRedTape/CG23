@@ -1,8 +1,10 @@
 #include "image_reader_factory.hpp"
 #include "ppm_image_reader.hpp"
+#include "bmp_image_reader.hpp"
 
 static std::unique_ptr<ImageReader> s_Readers[]{
-	std::make_unique<PPMImageReader>()
+	std::make_unique<PPMImageReader>(),
+	std::make_unique<BMPImageReader>()
 };
 
 const ImageReader* ImageReaderFactory::FindImageReaderFor(const std::string& format_extension) {
