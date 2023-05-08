@@ -47,4 +47,8 @@ public:
 	}
 
 	void Clear();
+
+	bool SaveImageTo(const std::string &filename)const;
+
+	static std::optional<Image> ReadImageFrom(const std::string &filename);
 };

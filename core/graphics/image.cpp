@@ -1,6 +1,10 @@
 #include "image.hpp"
 #include <cstring>
 #include <cassert>
+#include <filesystem>
+#include <fstream>
+#include "graphics\image_io/image_reader_factory.hpp"
+#include "graphics\image_io/image_writer_factory.hpp"
 
 Image::Image(size_t width, size_t height):
 	m_Width(width),
@@ -47,4 +51,35 @@ void Image::Clear() {
 	m_Data = nullptr;
 }
 
+bool Image::SaveImageTo(const std::string& filename)const{
+	const ImageWriter *writer = ImageWriterFactory::FindImageWriterFor(std::filesystem::path(filename).extension().string());
+
+	if(!writer)
+		return false;
+
+	std::fstream file(filename, std::ios::binary | std::ios::out);
+
+	if(!file.is_open())
+		return false;
+
+	return writer->Write(*this, file) == ImageWriter::Error::None;
+}
+
+std::optional<Image> Image::ReadImageFrom(const std::string& filename) {
+	const ImageReader* reader = ImageReaderFactory::FindImageReaderFor(std::filesystem::path(filename).extension().string());
+
+	if (!reader)
+		return {};
+
+	std::fstream file(filename, std::ios::binary | std::ios::in);
+
+	if (!file.is_open())
+		return {};
+
+	Expected<Image, ImageReader::Error> image = reader->Read(file);
+
+	if(image.IsError())
+		return {};
+
+	return {std::move(image.Value())};
 }
