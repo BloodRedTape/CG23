@@ -7,7 +7,8 @@
 
 struct ImageReader {
 	enum class Error{
-		IO
+		IO,
+		InvalidData
 	};
 
 	virtual Expected<Image, Error> Read(std::istream &instream)const = 0;
