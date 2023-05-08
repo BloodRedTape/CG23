@@ -1,8 +1,10 @@
 #include "image_writer_factory.hpp"
 #include "ppm_image_writer.hpp"
+#include "bmp_image_writer.hpp"
 
 static std::unique_ptr<ImageWriter> s_Writers[]{
-	std::make_unique<PPMImageWriter>()
+	std::make_unique<PPMImageWriter>(),
+	std::make_unique<BMPImageWriter>()
 };
 
 const ImageWriter* ImageWriterFactory::FindImageWriterFor(const std::string& format_extension) {
