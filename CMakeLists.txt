@@ -20,6 +20,10 @@ add_executable(CG23RayTracer
 target_include_directories(CG23RayTracer PUBLIC "raytracer")
 target_link_libraries(CG23RayTracer PRIVATE CG23Core)
 
+add_executable(CG23Converter
+	"converter/main.cpp"
+)
+target_link_libraries(CG23Converter PRIVATE CG23Core)
 
 add_executable(CG23Tests
 	"tests/main.cpp"
