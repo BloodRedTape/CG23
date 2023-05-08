@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graphics/image_writer.hpp"
+#include "graphics/image_io/image_writer.hpp"
 
 struct PPMImageWriter: ImageWriter{
 	ImageWriter::Error Write(const Image &image, std::ostream &outstream)const override;

@@ -4,8 +4,8 @@ project(CG23)
 add_library(CG23Core STATIC
 	"core/graphics/image.cpp" 
 	"core/graphics/color.cpp"
-	"core/graphics/ppm_image_writer.cpp" 
-	"core/graphics/image_writer_factory.cpp" 
+	"core/graphics/image_io/ppm_image_writer.cpp" 
+	"core/graphics/image_io/image_writer_factory.cpp" 
 )
 target_include_directories(CG23Core PUBLIC "core")
 target_compile_features(CG23Core PUBLIC cxx_std_17)
