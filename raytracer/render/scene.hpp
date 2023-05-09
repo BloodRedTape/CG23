@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <vector>
-#include "math/hittable.hpp"
+#include "primitives/hittable.hpp"
 #include "render/light.hpp"
 
 using HittableRef = std::unique_ptr<Hittable>;

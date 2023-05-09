@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/hittable.hpp"
+#include "primitives/hittable.hpp"
 #include "math/vector3.hpp"
 #include "math/functions.hpp"
 

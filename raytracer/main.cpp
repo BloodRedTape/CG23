@@ -2,8 +2,8 @@
 #include <iostream>
 
 #include "render/image_renderer.hpp"
-#include "math/sphere.hpp"
-#include "math/plane.hpp"
+#include "primitives/sphere.hpp"
+#include "primitives/plane.hpp"
 #include "graphics/image.hpp"
 #include "utils/clock.hpp"
 

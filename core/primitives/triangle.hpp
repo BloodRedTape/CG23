@@ -3,7 +3,7 @@
 
 #include "math/vector3.hpp"
 #include "math/functions.hpp"
-#include "math/hittable.hpp"
+#include "primitives/hittable.hpp"
 
 class Triangle: public Hittable{
 	Vector3f m_Vertices[3];

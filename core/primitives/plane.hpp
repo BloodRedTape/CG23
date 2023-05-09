@@ -2,7 +2,7 @@
 
 #include "math/functions.hpp"
 #include "math/vector3.hpp"
-#include "math/hittable.hpp"
+#include "primitives/hittable.hpp"
 
 
 class Plane: public Hittable {

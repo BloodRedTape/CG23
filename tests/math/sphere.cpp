@@ -1,4 +1,4 @@
-#include "math/sphere.hpp"
+#include "primitives/sphere.hpp"
 #include "math/functions.hpp"
 #include "gtest/gtest.h"
 
