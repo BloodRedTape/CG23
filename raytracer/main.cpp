@@ -1,9 +1,11 @@
 #include <cstdio>
+#include <iostream>
 
 #include "render/image_renderer.hpp"
 #include "math/sphere.hpp"
 #include "math/plane.hpp"
 #include "graphics/image.hpp"
+#include "utils/clock.hpp"
 
 int main() {
 	Scene scene;
@@ -20,7 +22,10 @@ int main() {
 
 	ImageRenderer renderer({720, 720});
 
+	Clock clock;
 	Image image = renderer.Render(scene, camera);
+	std::cout << "Trace took: " << clock.GetElapsedTime() << std::endl;
+
 	if(image.SaveImageTo("result.bmp"))
 		system("start result.bmp");
 	else
