@@ -17,6 +17,7 @@ target_compile_features(CG23Core PUBLIC cxx_std_17)
 
 add_executable(CG23RayTracer
 	"raytracer/main.cpp"
+	"raytracer/render/base_renderer.cpp"
 	"raytracer/render/console_renderer.cpp"
 )
 target_include_directories(CG23RayTracer PUBLIC "raytracer")

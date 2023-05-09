@@ -1,9 +1,6 @@
 #pragma once
 
-#include "camera.hpp"
-#include "scene.hpp"
-#include "math/ray.hpp"
-#include "math/vector2.hpp"
+#include "render/base_renderer.hpp"
 
 enum class RenderMode {
 	Color,
@@ -12,21 +9,15 @@ enum class RenderMode {
 };
 
 
-class ConsoleRenderer {
-private:
-	Vector2s m_Viewport;
+class ConsoleRenderer: private BaseRenderer{
 public:
 	ConsoleRenderer(Vector2s viewport);
 
-	void Render(const Scene &scene, const Camera &camera, RenderMode mode);
+	void Render(const Scene &scene, const Camera &camera, RenderMode mode)const;
 
 private:
 
-	Ray3f GenRay(Vector2s pixel_coordinate, const Camera &camera);
+	char Miss()const;
 
-	std::optional<HitResult> TraceRay(Ray3f ray, const Scene &scene);
-
-	char Miss();
-
-	char ClosestHit(HitResult hit, const Scene &scene);
+	char ClosestHit(HitResult hit, const Scene &scene)const;
 };
