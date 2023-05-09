@@ -1,13 +1,13 @@
 #include <cstdio>
 
-#include "render/console_renderer.hpp"
+#include "render/image_renderer.hpp"
 #include "math/sphere.hpp"
 #include "math/plane.hpp"
 #include "graphics/image.hpp"
 
 int main() {
 	Scene scene;
-	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 1.f));
+	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 0.8f));
 	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 1, 0}, 0.5f));
 	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.5f, 0), Vector3f::Up() ));
 
@@ -18,7 +18,11 @@ int main() {
 		70.f
 	};
 
-	ConsoleRenderer renderer({30, 30});
+	ImageRenderer renderer({720, 720});
 
-	renderer.Render(scene, camera, RenderMode::Color);
+	Image image = renderer.Render(scene, camera);
+	if(image.SaveImageTo("result.bmp"))
+		system("start result.bmp");
+	else
+		puts("Can't save file");
 }
