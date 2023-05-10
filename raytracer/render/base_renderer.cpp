@@ -23,9 +23,9 @@ Ray3f BaseRenderer::GenRay(Vector2s pixel_coordinate, const Camera& camera)const
 	Vector2f projection_plane_ray_intersect = centered_coordinates * projection_plane_pixel_size + projection_plane_pixel_size / 2.f;
 
 	Vector3f direction = 
-		  Vector3f::Forward() * projection_plane_distance
-		+ Vector3f::Right() * projection_plane_ray_intersect.x 
-		+ Vector3f::Up() * projection_plane_ray_intersect.y;
+		  camera.Forward() * projection_plane_distance
+		+ camera.Right() * projection_plane_ray_intersect.x 
+		+ camera.Up() * projection_plane_ray_intersect.y;
 
 	Vector3f origin = camera.Position;
 
