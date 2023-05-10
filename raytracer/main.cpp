@@ -16,7 +16,10 @@ int main() {
 
 	auto cow = ObjLoader().Load("../../../resources/cow.obj",Vector3f(), Vector3f(-90, 0, 90));
 
-	assert(cow.IsValue());
+	if(!cow.IsValue()){
+		std::cout << "Can't load cow\n";
+		return 1;
+	}
 
 	Scene scene;
 	//scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 0.8f));
