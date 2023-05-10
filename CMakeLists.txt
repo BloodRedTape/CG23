@@ -20,6 +20,7 @@ add_executable(CG23RayTracer
 	"raytracer/render/base_renderer.cpp"
 	"raytracer/render/console_renderer.cpp"
 	"raytracer/render/image_renderer.cpp"
+	"raytracer/render/obj_loader.cpp"
 )
 target_include_directories(CG23RayTracer PUBLIC "raytracer")
 target_link_libraries(CG23RayTracer PRIVATE CG23Core)
