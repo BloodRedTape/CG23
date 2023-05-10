@@ -36,7 +36,12 @@ Color ImageRenderer::ClosestHit(HitResult hit, const Scene& scene, DebugRenderMo
 	
 	switch (mode) {
 	case DebugRenderMode::Color:
-		return Vector3f(diffuse);
+	{
+		Vector3f shadow_bias = light_to_object_direction * 0.001f;
+		Ray3f to_light(hit.Position + shadow_bias, light_to_object_direction);
+		float shadow = TraceRay(to_light, scene).has_value() ? 0.5f : 1.f;
+		return Vector3f(diffuse * shadow);
+	}
 	case DebugRenderMode::Normal:
 		return (hit.Normal + 1.f) * 0.5f;
 	case DebugRenderMode::Depth:
