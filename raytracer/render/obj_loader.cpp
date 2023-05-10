@@ -1,8 +1,9 @@
 #include "obj_loader.hpp"
+#include "math/transform.hpp"
 #include <fstream>
 #include <sstream>
 
-Expected<Mesh, ObjLoader::Error> ObjLoader::Load(std::string filename) {
+Expected<Mesh, ObjLoader::Error> ObjLoader::Load(std::string filename, const Vector3f position, const Vector3f rotation, const Vector3f scale) {
 	std::fstream file(filename, std::ios::in);
 
 	if(!file.is_open())
@@ -10,6 +11,8 @@ Expected<Mesh, ObjLoader::Error> ObjLoader::Load(std::string filename) {
 
 	std::vector<Vector3f> vertices;
 	std::vector<Vector3u> faces;
+
+	Matrix4f transformation = Math::Translate(position) * Math::Rotate<float>(Math::Rad(rotation)) * Math::Scale(scale);
 
 	while (file) {
 		std::string line;
@@ -26,6 +29,9 @@ Expected<Mesh, ObjLoader::Error> ObjLoader::Load(std::string filename) {
 		if (line_type == "v") {
 			Vector3f vertex;
 			line_stream >> vertex.x >> vertex.y >> vertex.z;
+
+			vertex = transformation * Vector4f(vertex);
+
 			vertices.push_back(vertex);
 		}
 		if (line_type == "f") {
