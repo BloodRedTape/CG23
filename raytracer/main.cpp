@@ -21,10 +21,13 @@ int main() {
 	Scene scene;
 	//scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 0.8f));
 	//scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 1, 0}, 0.5f));
-	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.5f, 0), Vector3f::Up() ));
+
+	scene.Sky = Color::Black;
+	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.3f, 0), Vector3f::Up() ));
 	scene.Objects.push_back(std::make_unique<Mesh>(std::move(cow.Value()) ));
 
-	scene.PointLight = Light{{ -2.f, 1.f, 1.5}};
+	scene.PointLights.push_back(Light{{ -2.f, 1.f, 1.5}, Vector3f(1, 0, 0)});
+	scene.PointLights.push_back(Light{{ -2.f, 1.f, -1.5}, Vector3f(0, 0, 1)});
 
 	Camera camera{
 		-Vector3f::Forward() * 2.f + Vector3f::Up() * 0.1f,
@@ -32,14 +35,14 @@ int main() {
 		70.f
 	};
 
-	ImageRenderer renderer({500, 500});
+	ImageRenderer renderer({1280, 1280});
 
 	Clock clock;
 	Image image = renderer.Render(scene, camera, DebugRenderMode::Color);
 	std::cout << "Trace took: " << clock.GetElapsedTime() << std::endl;
 
-	if(image.SaveImageTo("result.bmp"))
-		system("start result.bmp");
+	if(image.SaveImageTo("color.bmp"))
+		system("start color.bmp");
 	else
 		puts("Can't save file");
 }

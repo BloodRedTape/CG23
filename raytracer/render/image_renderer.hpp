@@ -16,7 +16,11 @@ public:
 	Image Render(const Scene& scene, const Camera& camera, DebugRenderMode mode)const;
 private:
 
-	Color Miss()const;
+	Color Miss(const Scene &scene)const;
 
 	Color ClosestHit(HitResult hit, const Scene &scene, DebugRenderMode mode)const;
+
+	Vector3f AccumulateDiffuse(HitResult hit, const Scene& scene)const;
+
+	float AccumulateShadow(HitResult hit, const Scene &scene)const;
 };

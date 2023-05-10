@@ -17,34 +17,53 @@ Image ImageRenderer::Render(const Scene& scene, const Camera& camera, DebugRende
 			std::optional<HitResult> result = TraceRay(ray, scene);
 
 			//flip vertically because image has inverted coordinates
-			image.Get(x, m_Viewport.y - y - 1) = result.has_value() ? ClosestHit(*result, scene, mode) : Miss();
+			image.Get(x, m_Viewport.y - y - 1) = result.has_value() ? ClosestHit(*result, scene, mode) : Miss(scene);
 		}
 	});
 
 	return image;
 }
 
-Color ImageRenderer::Miss()const{
-	return Color(30, 120, 255, 255);
+Color ImageRenderer::Miss(const Scene &scene)const{
+	return scene.Sky;
 }
 
 Color ImageRenderer::ClosestHit(HitResult hit, const Scene& scene, DebugRenderMode mode)const{
 	using namespace Math;
-	Vector3f light_to_object_direction = Normalize(scene.PointLight.Position - hit.Position);
-
-	float diffuse = std::max(Math::Dot(hit.Normal, light_to_object_direction), 0.f);
 	
 	switch (mode) {
 	case DebugRenderMode::Color:
 	{
-		Vector3f shadow_bias = light_to_object_direction * 0.001f;
-		Ray3f to_light(hit.Position + shadow_bias, light_to_object_direction);
-		float shadow = TraceRay(to_light, scene).has_value() ? 0.5f : 1.f;
-		return Vector3f(diffuse * shadow);
+		return AccumulateDiffuse(hit, scene) * AccumulateShadow(hit, scene);
 	}
 	case DebugRenderMode::Normal:
 		return (hit.Normal + 1.f) * 0.5f;
 	case DebugRenderMode::Depth:
 		return Vector3f(hit.Distance);
 	}
+}
+Vector3f ImageRenderer::AccumulateDiffuse(HitResult hit, const Scene& scene)const{
+	Vector3f diffuse = 0.f;
+
+	for(const Light &light: scene.PointLights){
+		Vector3f light_to_object_direction = Math::Normalize(light.Position - hit.Position);
+
+		diffuse += std::max(Math::Dot(hit.Normal, light_to_object_direction), 0.f) * light.Color;
+	}
+
+	return diffuse;
+}
+
+float ImageRenderer::AccumulateShadow(HitResult hit, const Scene& scene)const {
+	float shadow = 1.f;
+
+	for(const Light &light: scene.PointLights){
+		Vector3f light_to_object_direction = Math::Normalize(light.Position - hit.Position);
+
+		Vector3f shadow_bias = hit.Normal * 0.001f;
+		Ray3f to_light(hit.Position + shadow_bias, light_to_object_direction);
+		shadow *= TraceRay(to_light, scene).has_value() ? 0.5f : 1.f;
+	}
+
+	return shadow;
 }

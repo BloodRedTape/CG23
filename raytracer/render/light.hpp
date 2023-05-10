@@ -4,5 +4,6 @@
 
 struct Light {
 	Vector3f Position;
+	Vector3f Color;
 };
 
