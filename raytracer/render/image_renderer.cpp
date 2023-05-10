@@ -7,7 +7,7 @@ ImageRenderer::ImageRenderer(Vector2s viewport):
 	BaseRenderer(viewport)
 {}
 
-Image ImageRenderer::Render(const Scene& scene, const Camera& camera)const{
+Image ImageRenderer::Render(const Scene& scene, const Camera& camera, DebugRenderMode mode)const{
 	Image image(m_Viewport.x, m_Viewport.y);
 
 	std::for_each(std::execution::par, IntIterator<int>(0), IntIterator<int>(m_Viewport.y), [&](int y) {
@@ -17,7 +17,7 @@ Image ImageRenderer::Render(const Scene& scene, const Camera& camera)const{
 			std::optional<HitResult> result = TraceRay(ray, scene);
 
 			//flip vertically because image has inverted coordinates
-			image.Get(x, m_Viewport.y - y - 1) = result.has_value() ? ClosestHit(*result, scene) : Miss();
+			image.Get(x, m_Viewport.y - y - 1) = result.has_value() ? ClosestHit(*result, scene, mode) : Miss();
 		}
 	});
 
@@ -28,16 +28,18 @@ Color ImageRenderer::Miss()const{
 	return Color(30, 120, 255, 255);
 }
 
-Color ImageRenderer::ClosestHit(HitResult hit, const Scene& scene)const{
+Color ImageRenderer::ClosestHit(HitResult hit, const Scene& scene, DebugRenderMode mode)const{
 	using namespace Math;
 	Vector3f light_to_object_direction = Normalize(scene.PointLight.Position - hit.Position);
 
 	float diffuse = std::max(Math::Dot(hit.Normal, light_to_object_direction), 0.f);
-
-	return Color(
-		(u8)(255 * diffuse),
-		(u8)(255 * diffuse),
-		(u8)(255 * diffuse),
-		255
-	);
+	
+	switch (mode) {
+	case DebugRenderMode::Color:
+		return Vector3f(diffuse);
+	case DebugRenderMode::Normal:
+		return (hit.Normal + 1.f) * 0.5f;
+	case DebugRenderMode::Depth:
+		return Vector3f(hit.Distance);
+	}
 }
