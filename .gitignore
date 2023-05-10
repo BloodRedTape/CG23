@@ -4,3 +4,5 @@ out
 .idea
 .cache
 .clangd
+
+CMakeSettings.json

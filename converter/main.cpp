@@ -1,27 +1,10 @@
 #include "graphics/image.hpp"
-#include <iostream>
 #include <filesystem>
 #include <fstream>
 #include "graphics/image_io/image_writer_factory.hpp"
 #include "graphics/image_io/image_reader_factory.hpp"
-
-template<typename ...ArgsType, typename FirstArgType>
-int Error(const char* fmt, FirstArgType arg, ArgsType...args) {
-	while (*fmt) {
-		if (*fmt == '%') {
-			std::cerr << arg;
-			return Error(fmt + 1, args...);
-		} else {
-			std::cerr << *fmt++;
-		}
-	}
-}
-
-int Error(const char* fmt) {
-	std::cerr << fmt << '\n';
-
-	return EXIT_FAILURE;
-}
+#include "utils/args.hpp"
+#include "utils/error.hpp"
 
 template<typename T>
 std::ostream& operator<<(std::ostream& stream, const std::vector<T>& data) {
@@ -37,11 +20,6 @@ std::ostream& operator<<(std::ostream& stream, const std::vector<T>& data) {
 	}
 	return stream;
 }
-
-struct ArgParse{
-	std::string Name;
-	std::string &OutValue;
-};
 
 int main(int argc, const char **argv) {
 	if (argc <= 1)
@@ -66,22 +44,10 @@ int main(int argc, const char **argv) {
         },
 	};
 
-	for (int i = 1; i < argc; i++) {
-		std::string arg = argv[i];
+	int arg_parse_fail = Parse(parse_args, argc - 1, argv + 1);
 
-		for (ArgParse& arg_parse : parse_args) {
-			std::string prefix = "--" + arg_parse.Name + '=';
-
-			if (arg.find(prefix) == 0) {
-				std::string value = arg.substr(prefix.size(), arg.size() - prefix.size());
-
-				if(!value.size())
-					return Error("Argument '%' has an empty value", arg_parse.Name);
-
-				arg_parse.OutValue = value;
-			}
-		}
-	}
+	if(arg_parse_fail != -1)
+		return Error("Argument: % has an empty value", parse_args[arg_parse_fail].Name);
 
 	Error("input: %, target: %, output: %", input_path, target_format, output_path);
 

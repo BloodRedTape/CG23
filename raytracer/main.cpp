@@ -9,22 +9,53 @@
 #include "primitives/mesh.hpp"
 #include "render/obj_loader.hpp"
 #include "math/transform.hpp"
+#include "utils/args.hpp"
+#include "utils/error.hpp"
+#include <windows.h>
 
-int main() {
+int main(int argc, const char **argv) {
+	std::string obj_path;
+	std::string img_path;
 
-	
+	if (!IsDebuggerPresent()) {
+		if (argc == 1)
+			return Error("Provide --source and --output arguments");
 
-	auto cow = ObjLoader().Load("../../../resources/cow.obj",Vector3f(), Vector3f(-90, 0, 90));
+		ArgParse arg_parse[] = {
+		{
+			"source",
+			obj_path
+        },
+		{
+			"output",
+			img_path
+		}
+		};
 
-	if(!cow.IsValue()){
-		std::cout << "Can't load cow\n";
-		return 1;
+		int arg_parse_fail = Parse(arg_parse, argc - 1, argv + 1);
+
+		if (arg_parse_fail != -1)
+			return Error("Arg % is empty", arg_parse[arg_parse_fail].Name);
+
+		if (!obj_path.size())
+			return Error("provide --source argument");
+
+		if (!img_path.size())
+			return Error("provide --output argument");
+	} else {
+		obj_path = "../../../resources/cow.obj";
+		img_path = "result.bmp";
 	}
+	 
+	auto cow = ObjLoader().Load(obj_path, Vector3f(), Vector3f(-90, 0, 90));
 
-	Scene scene;
+	if(!cow.IsValue())
+		return Error("Can't load % model", obj_path);
+
 	//scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 0.8f));
 	//scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 1, 0}, 0.5f));
 
+	Scene scene;
 	scene.Sky = Color::Black;
 	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.3f, 0), Vector3f::Up() ));
 	scene.Objects.push_back(std::make_unique<Mesh>(std::move(cow.Value()) ));
@@ -44,8 +75,8 @@ int main() {
 	Image image = renderer.Render(scene, camera, DebugRenderMode::Color);
 	std::cout << "Trace took: " << clock.GetElapsedTime() << std::endl;
 
-	if(image.SaveImageTo("color.bmp"))
-		system("start color.bmp");
+	if(image.SaveImageTo(img_path))
+		system(("start " + img_path).c_str());
 	else
-		puts("Can't save file");
+		return Error("Can't save image to %", img_path);
 }
