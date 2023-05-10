@@ -6,6 +6,7 @@
 #include "primitives/plane.hpp"
 #include "graphics/image.hpp"
 #include "utils/clock.hpp"
+#include "primitives/mesh.hpp"
 
 int main() {
 	Scene scene;

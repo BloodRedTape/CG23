@@ -12,13 +12,13 @@ public:
 		m_Vertices{vertices[0], vertices[1], vertices[2]}
 	{}
 
-	std::optional<HitResult> Hit(const Ray3f& ray)const override {
+	std::optional<HitResult> Hit(const Ray3f& ray, float t_min, float t_max)const override {
         using namespace Math;
         auto v0 = m_Vertices[0];
         auto v1 = m_Vertices[1];
         auto v2 = m_Vertices[2];
 
-        auto dir = -ray.Direction();
+        auto dir = ray.Direction();
         auto orig = ray.Origin();
 
 
@@ -34,12 +34,12 @@ public:
     
         float t = -(Dot(normal,orig) + d) / NdotRayDirection;
     
-        // check if the triangle is behind the ray
-        if (t < 0) 
+        // check if the triangle is out of the bounds
+        if (t < t_min || t > t_max) 
             return {}; // the triangle is behind
  
         // compute the intersection point using equation 1
-        Vector3f P = orig + t * dir;
+        Vector3f P = ray.At(t);
  
         // Step 2: inside-outside test
         Vector3f C; // vector perpendicular to triangle's plane
@@ -67,7 +67,7 @@ public:
 
         HitResult result;
         result.Position = P;
-        result.Normal = N;
+        result.Normal = normal;
         return { result }; // this ray hits the triangle
 	}
 
