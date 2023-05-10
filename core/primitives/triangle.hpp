@@ -68,6 +68,7 @@ public:
         HitResult result;
         result.Position = P;
         result.Normal = normal;
+        result.Distance = t;
         return { result }; // this ray hits the triangle
 	}
 
