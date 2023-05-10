@@ -36,6 +36,6 @@ public:
 				return {};
 		}
 
-		return {{ray.At(root), ray.At(root) - m_Origin, root}};
+		return {{ray.At(root), Normalize(ray.At(root) - m_Origin), root}};
 	}
 };

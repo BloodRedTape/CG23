@@ -12,7 +12,7 @@ private:
 public:
 	Plane(Vector3f origin, Vector3f normal) :
 		m_Origin(origin),
-		m_Normal(normal)
+		m_Normal(Math::Normalize(normal))
 	{}
 
 	std::optional<HitResult> Hit(const Ray3f& ray, float t_min, float t_max)const override {

@@ -22,7 +22,7 @@ public:
         auto orig = ray.Origin();
 
 
-        Vector3f normal = Cross(m_Vertices[1] - m_Vertices[0], m_Vertices[2] - m_Vertices[0]);
+        Vector3f normal = Normalize(Cross(m_Vertices[1] - m_Vertices[0], m_Vertices[2] - m_Vertices[0]));
     
         float NdotRayDirection = Dot(normal, dir);
 

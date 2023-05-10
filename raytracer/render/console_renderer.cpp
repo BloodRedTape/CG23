@@ -38,7 +38,7 @@ char ConsoleRenderer::Miss()const{
 }
 
 char ConsoleRenderer::ClosestHit(HitResult hit, const Scene &scene)const{
-	Vector3f light_to_object_direction = scene.PointLight.Position - hit.Position;
+	Vector3f light_to_object_direction = Math::Normalize(scene.PointLight.Position - hit.Position);
 
 	float diffuse = std::max(Math::Dot(hit.Normal, light_to_object_direction), 0.f);
 
