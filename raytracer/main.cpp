@@ -56,12 +56,9 @@ int main(int argc, const char **argv) {
 	//scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 1, 0}, 0.5f));
 
 	Scene scene;
-	scene.Sky = Color::Black;
+	scene.Sky = Color::While;
 	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.3f, 0), Vector3f::Up() ));
 	scene.Objects.push_back(std::make_unique<Mesh>(std::move(cow.Value()) ));
-
-	scene.PointLights.push_back(Light{{ -2.f, 1.f, 1.5}, Vector3f(1, 0, 0)});
-	scene.PointLights.push_back(Light{{ -2.f, 1.f, -1.5}, Vector3f(0, 0, 1)});
 
 	Camera camera{
 		-Vector3f::Forward() * 2.f + Vector3f::Up() * 0.1f,
@@ -73,7 +70,8 @@ int main(int argc, const char **argv) {
 
 	Clock clock;
 	size_t samples = 10;
-	Image image = renderer.Render(scene, camera, DebugRenderMode::Color, samples);
+	size_t bounces = 5;
+	Image image = renderer.Render(scene, camera, samples, bounces);
 	std::cout << "Trace took: " << clock.GetElapsedTime() << std::endl;
 
 	if(image.SaveImageTo(img_path))

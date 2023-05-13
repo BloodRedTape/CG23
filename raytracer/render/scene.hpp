@@ -9,6 +9,5 @@
 
 struct Scene {
 	std::vector<HittableRef> Objects;
-	std::vector<Light> PointLights;
-	Color Sky = Color::Blue;
+	Color Sky = Color::While;
 };

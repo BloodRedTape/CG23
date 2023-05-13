@@ -5,12 +5,20 @@
 #include <execution>
 #include <atomic>
 #include <iostream>
+
+Vector3f RandUnitVec3() {
+	return Math::Normalize<float>({
+		Rand<float>(-1, 1),
+		Rand<float>(-1, 1),
+		Rand<float>(-1, 1)
+	});
+}
 	
 ImageRenderer::ImageRenderer(Vector2s viewport):
 	BaseRenderer(viewport)
 {}
 
-Image ImageRenderer::Render(const Scene& scene, const Camera& camera, DebugRenderMode mode, size_t samples)const{
+Image ImageRenderer::Render(const Scene& scene, const Camera& camera, size_t samples, size_t bounces)const{
 	Image image(m_Viewport.x, m_Viewport.y);
 
 	std::atomic<int> progress;
@@ -28,8 +36,7 @@ Image ImageRenderer::Render(const Scene& scene, const Camera& camera, DebugRende
 
 				Ray3f ray = GenRay(uv, camera);
 
-				std::optional<HitResult> result = TraceRay(ray, scene);
-				color += (Vector3f)(result.has_value() ? ClosestHit(*result, scene, mode) : Miss(scene));
+				color += TracePath(ray, scene, bounces);
 			}
 
 			//flip vertically because image has inverted coordinates
@@ -45,46 +52,19 @@ Image ImageRenderer::Render(const Scene& scene, const Camera& camera, DebugRende
 	return image;
 }
 
-Color ImageRenderer::Miss(const Scene &scene)const{
-	return scene.Sky;
-}
+Vector3f ImageRenderer::TracePath(const Ray3f &ray, const Scene& scene, size_t bounces_left)const {
+	if(bounces_left == 0)
+		return Vector3f();
 
-Color ImageRenderer::ClosestHit(HitResult hit, const Scene& scene, DebugRenderMode mode)const{
-	using namespace Math;
-	
-	switch (mode) {
-	case DebugRenderMode::Color:
-	{
-		return AccumulateDiffuse(hit, scene) * AccumulateShadow(hit, scene);
-	}
-	case DebugRenderMode::Normal:
-		return (hit.Normal + 1.f) * 0.5f;
-	case DebugRenderMode::Depth:
-		return Vector3f(hit.Distance);
-	}
-}
-Vector3f ImageRenderer::AccumulateDiffuse(HitResult hit, const Scene& scene)const{
-	Vector3f diffuse = 0.f;
 
-	for(const Light &light: scene.PointLights){
-		Vector3f light_to_object_direction = Math::Normalize(light.Position - hit.Position);
+	std::optional<HitResult> hit = TraceRay(ray, scene);
 
-		diffuse += std::max(Math::Dot(hit.Normal, light_to_object_direction), 0.f) * light.Color;
-	}
+	if(!hit)
+		return scene.Sky;
 
-	return diffuse;
-}
+	Vector3f bounce_direction = Math::Normalize(hit->Normal + RandUnitVec3());
 
-float ImageRenderer::AccumulateShadow(HitResult hit, const Scene& scene)const {
-	float shadow = 1.f;
+	Ray3f new_ray(hit->Position + bounce_direction * 0.0001f, bounce_direction);
 
-	for(const Light &light: scene.PointLights){
-		Vector3f light_to_object_direction = Math::Normalize(light.Position - hit.Position);
-
-		Vector3f shadow_bias = hit.Normal * 0.001f;
-		Ray3f to_light(hit.Position + shadow_bias, light_to_object_direction);
-		shadow *= TraceRay(to_light, scene).has_value() ? 0.5f : 1.f;
-	}
-
-	return shadow;
+	return TracePath(new_ray, scene, bounces_left - 1) * 0.5f;
 }
