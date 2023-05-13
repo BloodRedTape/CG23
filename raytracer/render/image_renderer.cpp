@@ -3,6 +3,8 @@
 #include "utils/random.hpp"
 #include <algorithm>
 #include <execution>
+#include <atomic>
+#include <iostream>
 	
 ImageRenderer::ImageRenderer(Vector2s viewport):
 	BaseRenderer(viewport)
@@ -10,6 +12,9 @@ ImageRenderer::ImageRenderer(Vector2s viewport):
 
 Image ImageRenderer::Render(const Scene& scene, const Camera& camera, DebugRenderMode mode, size_t samples)const{
 	Image image(m_Viewport.x, m_Viewport.y);
+
+	std::atomic<int> progress;
+	const int pixels = m_Viewport.x * m_Viewport.y;
 
 	std::for_each(std::execution::par, IntIterator<int>(0), IntIterator<int>(m_Viewport.y), [&](int y) {
 		for (int x = 0; x < m_Viewport.x; x++) {
@@ -29,6 +34,11 @@ Image ImageRenderer::Render(const Scene& scene, const Camera& camera, DebugRende
 
 			//flip vertically because image has inverted coordinates
 			image.Get(x, m_Viewport.y - y - 1) = color / (float)samples;
+
+			int done = progress++;
+
+			if(done % (pixels / 100) == 0)
+				std::cout << done / (float)pixels * 100.f << "%\n";
 		}
 	});
 
