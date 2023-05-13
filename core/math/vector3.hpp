@@ -252,6 +252,28 @@ typedef Vector3<u32> Vector3u;
 typedef Vector3<float> Vector3f;
 typedef Vector3<double> Vector3d;
 
+namespace std{
+
+template<typename T>
+Vector3<T> min(const Vector3<T> &f, const Vector3<T> &s) {
+    return {
+        min(f.x, s.x),
+        min(f.y, s.y),
+        min(f.z, s.z)
+    };
+}
+
+template<typename T>
+Vector3<T> max(const Vector3<T> &f, const Vector3<T> &s) {
+    return {
+        max(f.x, s.x),
+        max(f.y, s.y),
+        max(f.z, s.z)
+    };
+}
+
+}//namespace std::
+
 namespace Math{
 
 template <typename NumberType>

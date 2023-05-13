@@ -6,7 +6,6 @@
 #include "render/light.hpp"
 #include "graphics/color.hpp"
 
-using HittableRef = std::unique_ptr<Hittable>;
 
 struct Scene {
 	std::vector<HittableRef> Objects;

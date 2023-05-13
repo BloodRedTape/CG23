@@ -3,7 +3,9 @@
 
 #include "math/vector3.hpp"
 #include "math/functions.hpp"
+#include "math/aabb3.hpp"
 #include "primitives/hittable.hpp"
+#include "utils/algorithms.hpp"
 
 class Triangle: public Hittable{
 	Vector3f m_Vertices[3];
@@ -71,5 +73,25 @@ public:
         result.Distance = t;
         return { result }; // this ray hits the triangle
 	}
+
+
+    AABB3f MakeBoundingBox()const {
+        Vector3f min(
+            Min({m_Vertices[0].x, m_Vertices[1].x, m_Vertices[2].x}),
+            Min({m_Vertices[0].y, m_Vertices[1].y, m_Vertices[2].y}),
+            Min({m_Vertices[0].z, m_Vertices[1].z, m_Vertices[2].z})
+        );
+        Vector3f max(
+            Max({m_Vertices[0].x, m_Vertices[1].x, m_Vertices[2].x}),
+            Max({m_Vertices[0].y, m_Vertices[1].y, m_Vertices[2].y}),
+            Max({m_Vertices[0].z, m_Vertices[1].z, m_Vertices[2].z})
+        );
+
+        return AABB3f(min, max);
+    }
+
+    Vector3f MakeCentroid()const {
+        return (m_Vertices[0] + m_Vertices[1] + m_Vertices[2]) / 3.f;
+    }
 
 };
