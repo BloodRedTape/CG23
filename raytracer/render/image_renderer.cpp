@@ -62,7 +62,7 @@ Vector3f ImageRenderer::TracePath(const Ray3f &ray, const Scene& scene, size_t b
 	if(!hit)
 		return scene.Sky;
 
-	Vector3f bounce_direction = Math::Normalize(hit->Normal + RandUnitVec3());
+	Vector3f bounce_direction = Math::Lerp(Math::Reflect(ray.Direction(), hit->Normal), Math::Normalize(hit->Normal + RandUnitVec3()), hit->Material.Roughness);
 
 	Ray3f new_ray(hit->Position + bounce_direction * 0.0001f, bounce_direction);
 

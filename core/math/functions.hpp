@@ -121,6 +121,10 @@ template <typename T>
 constexpr T Dot(const Vector4<T> &left, const Vector4<T> &right){
     return left.x * right.x + left.y * right.y + left.z * right.z + left.w * right.w;
 }
+template <typename T>
+constexpr Vector3<T> Reflect(const Vector3<T>& incident, const Vector3<T>& normal) {
+    return incident - 2.0f * Dot(incident, normal) * normal;
+}
 
 template <typename T>
 Vector3<T> Cross(const Vector3<T>& vec1, const Vector3<T>& vec2) {

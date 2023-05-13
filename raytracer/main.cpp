@@ -55,9 +55,18 @@ int main(int argc, const char **argv) {
 	//scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 0, 0}, 0.8f));
 	//scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{0, 1, 0}, 0.5f));
 
+	MaterialProperties gold;
+	gold.Roughness = 0;
+	gold.Color = Color(255, 255, 0, 255);
+
+	MaterialProperties red_plastic;
+	red_plastic.Color = Color::Red;
+
 	Scene scene;
 	scene.Sky = Color::While;
-	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.3f, 0), Vector3f::Up() ));
+	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.3f, 0), Vector3f::Up(), gold));
+
+	cow.Value().SetMaterial(red_plastic);
 	scene.Objects.push_back(std::make_unique<Mesh>(std::move(cow.Value()) ));
 
 	Camera camera{

@@ -5,10 +5,17 @@
 #include "math/vector3.hpp"
 #include "math/ray.hpp"
 
+struct MaterialProperties {
+	Vector3f Color{1.f};
+	float Roughness = 1.f;
+};
+
 struct HitResult {
 	Vector3f Position;
 	Vector3f Normal;
 	float Distance;
+
+	MaterialProperties Material;
 };
 
 struct Hittable{

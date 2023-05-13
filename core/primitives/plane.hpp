@@ -9,10 +9,12 @@ class Plane: public Hittable {
 private:
 	Vector3f m_Origin;
 	Vector3f m_Normal;
+	MaterialProperties m_Material;
 public:
-	Plane(Vector3f origin, Vector3f normal) :
+	Plane(Vector3f origin, Vector3f normal, MaterialProperties mat) :
 		m_Origin(origin),
-		m_Normal(Math::Normalize(normal))
+		m_Normal(Math::Normalize(normal)),
+		m_Material(mat)
 	{}
 
 	std::optional<HitResult> Hit(const Ray3f& ray, float t_min, float t_max)const override {
@@ -27,7 +29,7 @@ public:
         if (t < 0.f) 
             return {};
 
-        return {{ ray.At(t), m_Normal, t}};
+        return {{ ray.At(t), m_Normal, t, m_Material}};
 	}
 
 };

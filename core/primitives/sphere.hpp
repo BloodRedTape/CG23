@@ -8,10 +8,12 @@ class Sphere : public Hittable {
 private:
 	Vector3f m_Origin;
 	float m_Radius;
+	MaterialProperties m_Material;
 public:
-	Sphere(Vector3f origin, float radius):
+	Sphere(Vector3f origin, float radius, MaterialProperties mat):
 		m_Origin(origin),
-		m_Radius(radius)
+		m_Radius(radius),
+		m_Material(mat)
 	{}
 
 	std::optional<HitResult> Hit(const Ray3f& ray, float t_min, float t_max)const override {
@@ -36,6 +38,6 @@ public:
 				return {};
 		}
 
-		return {{ray.At(root), Normalize(ray.At(root) - m_Origin), root}};
+		return {{ray.At(root), Normalize(ray.At(root) - m_Origin), root, m_Material}};
 	}
 };
