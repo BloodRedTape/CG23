@@ -1,5 +1,6 @@
 #include "image_renderer.hpp"
 #include "utils/int_iterator.hpp"
+#include "utils/random.hpp"
 #include <algorithm>
 #include <execution>
 	
@@ -7,17 +8,27 @@ ImageRenderer::ImageRenderer(Vector2s viewport):
 	BaseRenderer(viewport)
 {}
 
-Image ImageRenderer::Render(const Scene& scene, const Camera& camera, DebugRenderMode mode)const{
+Image ImageRenderer::Render(const Scene& scene, const Camera& camera, DebugRenderMode mode, size_t samples)const{
 	Image image(m_Viewport.x, m_Viewport.y);
 
 	std::for_each(std::execution::par, IntIterator<int>(0), IntIterator<int>(m_Viewport.y), [&](int y) {
 		for (int x = 0; x < m_Viewport.x; x++) {
-			Ray3f ray = GenRay({ x, y }, camera);
+			Vector3f color;
 
-			std::optional<HitResult> result = TraceRay(ray, scene);
+			for(size_t i = 0; i<samples; i++){
+				Vector2f uv(
+					(x+Rand<float>(-0.5, 0.5)) / m_Viewport.x,
+					(y+Rand<float>(-0.5, 0.5)) / m_Viewport.y
+				);
+
+				Ray3f ray = GenRay(uv, camera);
+
+				std::optional<HitResult> result = TraceRay(ray, scene);
+				color += (Vector3f)(result.has_value() ? ClosestHit(*result, scene, mode) : Miss(scene));
+			}
 
 			//flip vertically because image has inverted coordinates
-			image.Get(x, m_Viewport.y - y - 1) = result.has_value() ? ClosestHit(*result, scene, mode) : Miss(scene);
+			image.Get(x, m_Viewport.y - y - 1) = color / (float)samples;
 		}
 	});
 

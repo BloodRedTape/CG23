@@ -72,7 +72,8 @@ int main(int argc, const char **argv) {
 	ImageRenderer renderer({1280, 1280});
 
 	Clock clock;
-	Image image = renderer.Render(scene, camera, DebugRenderMode::Color);
+	size_t samples = 10;
+	Image image = renderer.Render(scene, camera, DebugRenderMode::Color, samples);
 	std::cout << "Trace took: " << clock.GetElapsedTime() << std::endl;
 
 	if(image.SaveImageTo(img_path))

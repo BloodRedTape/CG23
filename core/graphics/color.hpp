@@ -29,6 +29,14 @@ struct Color {
 		A(255)
 	{}
 
+	operator Vector3f()const {
+		return 	{
+		    R / 255.f,
+		    G / 255.f,
+		    B / 255.f
+		};
+	}
+
 	static const Color Green;
 	static const Color Red;
 	static const Color Blue;

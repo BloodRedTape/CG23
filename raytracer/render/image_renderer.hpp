@@ -13,7 +13,7 @@ class ImageRenderer: public BaseRenderer{
 public:
 	ImageRenderer(Vector2s viewport);
 
-	Image Render(const Scene& scene, const Camera& camera, DebugRenderMode mode)const;
+	Image Render(const Scene& scene, const Camera& camera, DebugRenderMode mode, size_t samples)const;
 private:
 
 	Color Miss(const Scene &scene)const;

@@ -4,7 +4,7 @@ BaseRenderer::BaseRenderer(Vector2s viewport):
 	m_Viewport(viewport)
 {}
 
-Ray3f BaseRenderer::GenRay(Vector2s pixel_coordinate, const Camera& camera)const {
+Ray3f BaseRenderer::GenRay(Vector2f uv, const Camera& camera)const {
 	const float aspect = m_Viewport.x / m_Viewport.y;
 
 	float h_fov = camera.FOV / 2.f;
@@ -18,9 +18,9 @@ Ray3f BaseRenderer::GenRay(Vector2s pixel_coordinate, const Camera& camera)const
 
 	assert(Math::IsNearlyEqual(projection_plane_pixel_size.x, projection_plane_pixel_size.y));
 
-	Vector2f centered_coordinates = pixel_coordinate - m_Viewport / 2;
+	Vector2f centered_coordinates = uv - Vector2f(0.5f);
 
-	Vector2f projection_plane_ray_intersect = centered_coordinates * projection_plane_pixel_size + projection_plane_pixel_size / 2.f;
+	Vector2f projection_plane_ray_intersect = centered_coordinates + projection_plane_pixel_size / 2.f;
 
 	Vector3f direction = 
 		  camera.Forward() * projection_plane_distance

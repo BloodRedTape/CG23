@@ -12,7 +12,7 @@ void ConsoleRenderer::Render(const Scene& scene, const Camera& camera, RenderMod
 
 	for (int y = m_Viewport.y; y >= 0; y--) {
 		for (int x = 0; x < m_Viewport.x; x++) {
-			Ray3f ray = GenRay({x, y}, camera);
+			Ray3f ray = GenRay(Vector2f(x, y) / Vector2f(m_Viewport), camera);
 
 			std::optional<HitResult> result = TraceRay(ray, scene);
 

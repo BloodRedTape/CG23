@@ -11,7 +11,7 @@ protected:
 public:
 	BaseRenderer(Vector2s viewport);
 
-	Ray3f GenRay(Vector2s pixel_coordinate, const Camera &camera)const;
+	Ray3f GenRay(Vector2f uv, const Camera &camera)const;
 
 	std::optional<HitResult> TraceRay(Ray3f ray, const Scene &scene)const;
 
