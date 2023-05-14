@@ -8,6 +8,8 @@
 struct MaterialProperties {
 	Vector3f Color{1.f};
 	float Roughness = 1.f;
+	Vector3f EmissionColor{0.f};
+	float EmissionStrength = 0.f;
 };
 
 struct HitResult {
