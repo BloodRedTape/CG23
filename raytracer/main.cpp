@@ -62,7 +62,7 @@ int main(int argc, const char **argv) {
 
 	MaterialProperties gold;
 	gold.Roughness = 1;
-	gold.Color = Color(101, 148, 68, 255);
+	gold.Color = Color(242, 229, 109, 255);
 
 	MaterialProperties rough_metal;
 	rough_metal.Roughness = 0.2;
@@ -73,10 +73,10 @@ int main(int argc, const char **argv) {
 	metal.Color = Color(200, 200, 200, 255);
 
 	MaterialProperties red_plastic;
-	red_plastic.Color = Color(61, 152, 255, 255);
+	red_plastic.Color = Color(227, 94, 79, 255);
 
 	Color nice_blue(51, 102, 232, 255);
-	Color nice_red(255, 74, 61, 255);
+	Color nice_red(232, 51, 51, 255);
 
 	MaterialProperties blue_light_mat;
 	blue_light_mat.Color = Color::Black;
@@ -97,7 +97,7 @@ int main(int argc, const char **argv) {
 
 	Scene scene;
 	bool is_night = true;
-	scene.Sky = is_night ? Color(14, 56, 74, 255) : Color(115, 227, 250, 255);
+	scene.Sky = is_night ? Color(14, 56, 74, 255) : Color(207, 245, 255, 255);
 	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.3f, 0), Vector3f::Up(), gold));
 
 	cow.Value().SetMaterial(red_plastic);
