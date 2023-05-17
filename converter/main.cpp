@@ -5,6 +5,7 @@
 #include "graphics/image_io/image_reader_factory.hpp"
 #include "utils/args.hpp"
 #include "utils/error.hpp"
+#include <windows.h>
 
 template<typename T>
 std::ostream& operator<<(std::ostream& stream, const std::vector<T>& data) {
@@ -22,14 +23,15 @@ std::ostream& operator<<(std::ostream& stream, const std::vector<T>& data) {
 }
 
 int main(int argc, const char **argv) {
-	if (argc <= 1)
-		return Error("Can't run convertor without any parameters");
-
 	std::string input_path;
 	std::string target_format;
 	std::string output_path;
 
-	ArgParse parse_args[] = {
+	if(!IsDebuggerPresent()){
+		if (argc <= 1)
+			return Error("Can't run convertor without any parameters");
+
+		ArgParse parse_args[] = {
 		{
 			"input",
 			input_path
@@ -42,12 +44,16 @@ int main(int argc, const char **argv) {
 			"output",
 			output_path
         },
-	};
+		};
 
-	int arg_parse_fail = Parse(parse_args, argc - 1, argv + 1);
+		int arg_parse_fail = Parse(parse_args, argc - 1, argv + 1);
 
-	if(arg_parse_fail != -1)
-		return Error("Argument: % has an empty value", parse_args[arg_parse_fail].Name);
+		if (arg_parse_fail != -1)
+			return Error("Argument: % has an empty value", parse_args[arg_parse_fail].Name);
+	} else {
+		input_path = "../test_pic.bmp";
+		output_path = "../test_pic2.ppm";
+	}
 
 	Error("input: %, target: %, output: %", input_path, target_format, output_path);
 
