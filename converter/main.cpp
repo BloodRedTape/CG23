@@ -54,8 +54,17 @@ int main(int argc, const char **argv) {
 	if(!input_path.size())
 		return Error("Provide --input argument, else how we can know what to convert lol");
 
-	if(!target_format.size())
-		return Error("Provide --target argument, else how we can know what format convert to lol");
+	if(!target_format.size() && !output_path.size())
+		return Error("Provide --target or --output argument, else how we can know what format convert to lol");
+
+		
+	if(!output_path.size())
+		output_path = std::filesystem::path(input_path).replace_extension(target_format).string();
+
+	if(!target_format.size()){
+		target_format = std::filesystem::path(output_path).extension().string();
+		target_format = target_format.substr(1, target_format.size() - 1);
+	}
 
 	target_format = "." + target_format;
 
@@ -80,9 +89,6 @@ int main(int argc, const char **argv) {
 
 	if(image.IsError())
 		return Error("File reading failed because of IO error");
-
-	if(!output_path.size())
-		output_path = std::filesystem::path(input_path).replace_extension(target_format).string();
 
 	const ImageWriter *writer = ImageWriterFactory::FindImageWriterFor(target_format);
 	if(!writer)
