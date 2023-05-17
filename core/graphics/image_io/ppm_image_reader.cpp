@@ -23,14 +23,15 @@ Expected<Image, ImageReader::Error> PPMImageReader::Read(std::istream& instream)
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
+			if(instream.eof())
+				return ImageReader::Error::InvalidData;
+
 			int r, g, b;
 
 			instream >> r >> g >> b;
 
 			//std::cout << r << ' ' << g  << ' ' << b << '\t';
 
-			if(instream.eof())
-				return ImageReader::Error::InvalidData;
 
 			Color &color = image.Get(x, y);
 
