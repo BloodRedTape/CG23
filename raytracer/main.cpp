@@ -47,7 +47,8 @@ int main(int argc, const char **argv) {
 		img_path = "result.bmp";
 	}
 	 
-	auto cow = ObjLoader().Load(obj_path, Vector3f(), Vector3f(-90, 0, 90));
+	auto cow = ObjLoader().Load(obj_path, Vector3f(0, -0.3, 0), Vector3f(-90, 0, 90));
+	auto cow2 = ObjLoader().Load(obj_path, Vector3f(0, 0.5, 0), Vector3f(0, 0, 90));
 
 	if(!cow.IsValue())
 		return Error("Can't load % model", obj_path);
@@ -59,9 +60,11 @@ int main(int argc, const char **argv) {
 	scene.Sky = Color::Black;
 	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.3f, 0), Vector3f::Up() ));
 	scene.Objects.push_back(std::make_unique<Mesh>(std::move(cow.Value()) ));
+	scene.Objects.push_back(std::make_unique<Mesh>(std::move(cow2.Value()) ));
 
 	scene.PointLights.push_back(Light{{ -2.f, 1.f, 1.5}, Vector3f(1, 0, 0)});
 	scene.PointLights.push_back(Light{{ -2.f, 1.f, -1.5}, Vector3f(0, 0, 1)});
+	//scene.PointLights.push_back(Light{{ 2.f, -1.f, 0.f}, Vector3f(0, 1, 0)});
 
 	Camera camera{
 		-Vector3f::Forward() * 2.f + Vector3f::Up() * 0.1f,
