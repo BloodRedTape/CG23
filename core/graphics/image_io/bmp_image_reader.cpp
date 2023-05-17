@@ -1,6 +1,7 @@
 #include "bmp_image_reader.hpp"
 #include "bmp_header.hpp"
 #include "math/functions.hpp"
+#include <iostream>
 #include <cassert>
 
 Expected<Image, ImageReader::Error> BMPImageReader::Read(std::istream& instream)const {
@@ -9,6 +10,15 @@ Expected<Image, ImageReader::Error> BMPImageReader::Read(std::istream& instream)
     instream.read((char*)&header, sizeof(header));
 
     if(!header.depth || !header.width || !header.filesize || instream.eof())
+        return Error::InvalidData;
+
+    if(header.bits != 24)
+        return Error::InvalidData;
+
+    if(header.headersize >= sizeof(BMPHeader))
+        //make sure we ignore header bytes if it contains more data than we support
+        instream.ignore(header.headersize - sizeof(BMPHeader));
+    else
         return Error::InvalidData;
 
     Image image(header.width, header.depth);
@@ -27,12 +37,10 @@ Expected<Image, ImageReader::Error> BMPImageReader::Read(std::istream& instream)
                 return Error::IO;
         }
 
-        u32 TempBuffer = 0;
         const int row_size = image.Width() * Channels;
         const int null_bytes_count = Math::AlignUp<int>(row_size, RowAlignment) - row_size;
 
-        assert(null_bytes_count <= sizeof(TempBuffer));
-        instream.read((char *)&TempBuffer, null_bytes_count);
+        instream.ignore(null_bytes_count);
     }
 
     return {std::move(image)};
