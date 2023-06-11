@@ -5,9 +5,13 @@
 #include "primitives/hittable.hpp"
 #include "render/light.hpp"
 #include "graphics/color.hpp"
+#include "graphics/image.hpp"
 
 
 struct Scene {
 	std::vector<HittableRef> Objects;
-	Color Sky = Color::While;
+	Color SkyFallbackColor = Color::While;
+	Image SkySphericalMap;
+
+	Color SampleSkyColor(Vector3f direction)const;
 };

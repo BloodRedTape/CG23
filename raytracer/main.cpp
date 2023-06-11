@@ -105,8 +105,9 @@ int main(int argc, const char **argv) {
 
 	Scene scene;
 	bool is_night = false;
-	scene.Sky = is_night ? Color(14, 56, 74, 255) : Color(207, 245, 255, 255);
-	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.3f, 0), Vector3f::Up(), gold));
+	//scene.Sky = is_night ? Color(14, 56, 74, 255) : Color(207, 245, 255, 255);
+	scene.SkySphericalMap = std::move(Image::ReadImageFrom("../../../resources/golf_course_sunrise_4k.bmp").value());
+	//scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.3f, 0), Vector3f::Up(), gold));
 
 #if PBR
 	cow.Value().SetMaterial(red_plastic);

@@ -60,7 +60,7 @@ Vector3f ImageRenderer::TracePath(const Ray3f &ray, const Scene& scene, size_t b
 	std::optional<HitResult> hit = TraceRay(ray, scene);
 
 	if(!hit)
-		return scene.Sky;
+		return scene.SampleSkyColor(ray.Direction());
 
 
 	MaterialProperties mat = hit->Material;

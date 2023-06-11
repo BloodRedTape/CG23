@@ -10,7 +10,7 @@ private:
 	size_t m_Width = 0;
 	size_t m_Height = 0;
 public:
-	Image();
+	Image() = default;
 
 	Image(size_t width, size_t height);
 
