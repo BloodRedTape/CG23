@@ -10,6 +10,7 @@ struct MaterialProperties {
 	float Roughness = 1.f;
 	Vector3f EmissionColor{0.f};
 	float EmissionStrength = 0.f;
+	float Metallic = 1.f;
 };
 
 struct HitResult {

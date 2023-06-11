@@ -93,22 +93,51 @@ int main(int argc, const char **argv) {
 	yellow_light_mat.EmissionColor = Color(245, 229, 86, 255);
 	yellow_light_mat.EmissionStrength = 3.f;
 
-	
+	MaterialProperties white_light;
+	white_light.Color = Color::Black;
+	white_light.EmissionColor = Color(255, 255, 255, 255);
+	white_light.EmissionStrength = 3.f;
+
+	MaterialProperties green_plastic;
+	green_plastic.Color = Color(30, 220, 40, 255);
+	green_plastic.Metallic = 0.05;
+	green_plastic.Roughness = 0.0;
 
 	Scene scene;
-	bool is_night = true;
+	bool is_night = false;
 	scene.Sky = is_night ? Color(14, 56, 74, 255) : Color(207, 245, 255, 255);
 	scene.Objects.push_back(std::make_unique<Plane>(Vector3f(0, -0.3f, 0), Vector3f::Up(), gold));
 
+#if PBR
 	cow.Value().SetMaterial(red_plastic);
+
 	scene.Objects.push_back(std::make_unique<Mesh>(std::move(cow.Value()) ));
 
-	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{ -0.4f, 1.f, 0.8f}, 0.3f, yellow_light_mat));
-	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{ -0.4f, 1.f, -0.8f}, 0.3f, red_light_mat));
+	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{ -0.4f, 1.f, 0.8f}, 0.2f, yellow_light_mat));
+	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{ -0.4f, 1.f, -0.8f}, 0.2f, red_light_mat));
 
 	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{ -0.4f, 0, -0.9f}, 0.5f, metal));
 	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{ -0.4f, 0, 0.9f}, 0.5f, rough_metal));
-	//scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{ -0.4f, 1.f, 0.8f}, 0.5f, blue_light_mat));
+	//scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{ -0.4f, 0.8f, 0.f}, 0.3f, green_plastic));
+#else
+	float Num = 5;
+	for (int i = 0; i <= (int)Num; i++) {
+		for (int j = 0; j <= (int)Num; j++) {
+			float met = i / Num;
+			float rought = j / Num;
+			MaterialProperties mat;
+			mat.Color = Color(180, 180, 180, 255);
+			mat.Metallic = met;
+			mat.Roughness = rought;
+
+			const auto size = 1 / Num;
+
+			scene.Objects.push_back(std::make_unique<Sphere>(Vector3f( -0.6, i * size - 0.2, j * size - size * Num / 2), size / 2 * 0.9, mat));
+		}
+	}
+	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{ -0.9f, 0.5f, 0.8f}, 0.2f, white_light));
+	scene.Objects.push_back(std::make_unique<Sphere>(Vector3f{ -0.9f, 0.5f, -0.8f}, 0.2f, white_light));
+#endif
 
 	Camera camera{
 		-Vector3f::Forward() * 2.f + Vector3f::Up() * 0.1f,

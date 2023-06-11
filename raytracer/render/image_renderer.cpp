@@ -62,18 +62,23 @@ Vector3f ImageRenderer::TracePath(const Ray3f &ray, const Scene& scene, size_t b
 	if(!hit)
 		return scene.Sky;
 
-	Vector3f diffuse_direction = Math::Normalize(hit->Normal + RandUnitVec3());
-	Vector3f specular_direction = Math::Reflect(ray.Direction(), hit->Normal);
 
 	MaterialProperties mat = hit->Material;
 
-	Vector3f bounce_direction = Math::Lerp(specular_direction, diffuse_direction, mat.Roughness);
+	Vector3f diffuse_direction = Math::Normalize(hit->Normal + RandUnitVec3());
+	Vector3f specular_direction = Math::Normalize(Math::Lerp(Math::Reflect(ray.Direction(), hit->Normal), diffuse_direction, mat.Roughness));
 
-	Ray3f new_ray(hit->Position + bounce_direction * 0.0001f, bounce_direction);
+	bool is_spec = Rand<float>(0, 1) >= mat.Metallic;
 
+	Vector3f ray_dir = is_spec ? specular_direction : diffuse_direction;
 
-	Vector3f incoming_light = mat.EmissionColor * mat.EmissionStrength;
+	Ray3f new_ray(hit->Position + ray_dir * 0.0001f, ray_dir);
+
+	Vector3f incoming_color = TracePath(new_ray, scene, bounces_left - 1);
+
+	Vector3f emmited_light = mat.EmissionColor * mat.EmissionStrength;
 	Vector3f surface_color = mat.Color;
 
-	return TracePath(new_ray, scene, bounces_left - 1) * surface_color + incoming_light;
+
+	return (is_spec ? incoming_color * Math::Lerp(surface_color, Vector3f(1), mat.Metallic): incoming_color * surface_color) + emmited_light;
 }
